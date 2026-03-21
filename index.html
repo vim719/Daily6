@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>PULSE | Focus & Energy</title>
+    <style>
+        :root {
+            /* 4 Vibrant States for 24 Hours */
+            --morning: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+            --noon: linear-gradient(-45deg, #00c6ff, #0072ff, #00c6ff, #0072ff);
+            --evening: linear-gradient(-45deg, #6a11cb, #2575fc, #6a11cb, #2575fc);
+            --midnight: linear-gradient(-45deg, #0f2027, #203a43, #2c5364, #0f2027);
+        }
+
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; font-family: 'Impact', sans-serif;
+            display: flex; flex-direction: column;
+            background-size: 400% 400% !important;
+            animation: gradientBG 15s ease infinite;
+            transition: all 2s ease-in-out;
+            color: white;
+        }
+
+        /* Subtle Background Movement */
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* Top HUD */
+        .hud {
+            padding: 30px; display: flex; justify-content: space-between; align-items: flex-start;
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-weight: 300; letter-spacing: 3px; text-transform: uppercase;
+            font-size: clamp(0.7rem, 2vw, 1rem);
+        }
+
+        .city-box input {
+            background: none; border: none; border-bottom: 1px solid rgba(255,255,255,0.4);
+            color: white; text-transform: uppercase; width: 100px; outline: none;
+            font-size: inherit; letter-spacing: inherit;
+        }
+
+        /* The Centered Booster Message */
+        .stage {
+            flex: 1; display: flex; justify-content: center; align-items: center;
+            padding: 20px; text-align: center;
+        }
+
+        #booster {
+            font-size: 18vw; /* Scales to screen width */
+            line-height: 0.85;
+            text-shadow: 0 10px 50px rgba(0,0,0,0.2);
+            cursor: pointer;
+            user-select: none;
+            transition: transform 0.2s active;
+        }
+
+        #booster:active { transform: scale(0.95); }
+
+        @media (min-width: 1000px) { #booster { font-size: 10rem; } }
+
+        /* Smooth Text Animation */
+        .fade-in { animation: fadeInMsg 0.8s ease-out; }
+        @keyframes fadeInMsg {
+            from { opacity: 0; transform: translateY(20px) scale(0.9); filter: blur(10px); }
+            to { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="hud">
+        <div id="date-display">SAT, MAR 21</div>
+        <div class="city-box">
+            <input type="text" id="city" placeholder="CITY NAME">
+            <div id="clock" style="margin-top: 5px; font-weight: bold;">16:32</div>
+        </div>
+    </div>
+
+    <div class="stage">
+        <div id="booster" class="fade-in">
+            GRIND<br>THE<br>RESULTS
+        </div>
+    </div>
+
+    <script>
+        const Actions = ["SCALE", "BUILD", "ATTACK", "EXECUTE", "LEAD", "FOCUS", "WIN", "GRIND", "CREATE"];
+        const Targets = ["YOUR", "THE", "THIS", "PURE", "REAL", "EVERY"];
+        const Outcomes = ["LEGACY", "VISION", "WEALTH", "EMPIRE", "FUTURE", "IMPACT", "RESULTS"];
+
+        function getNewPhrase() {
+            const a = Actions[Math.floor(Math.random() * Actions.length)];
+            const t = Targets[Math.floor(Math.random() * Targets.length)];
+            const o = Outcomes[Math.floor(Math.random() * Outcomes.length)];
+            
+            // 70% chance of 3x3 layout, 30% chance of 1-line layout
+            if (Math.random() > 0.3) {
+                return `${a}<br>${t}<br>${o}`;
+            } else {
+                return `${a} ${t} ${o}`;
+            }
+        }
+
+        function refreshApp() {
+            const now = new Date();
+            const hrs = now.getHours();
+            const boosterEl = document.getElementById('booster');
+
+            // 1. Every 6-hour Energy Shift
+            if (hrs >= 6 && hrs < 12) {
+                document.body.style.background = "var(--morning)";
+            } else if (hrs >= 12 && hrs < 18) {
+                document.body.style.background = "var(--noon)";
+            } else if (hrs >= 18 && hrs < 24) {
+                document.body.style.background = "var(--evening)";
+            } else {
+                document.body.style.background = "var(--midnight)";
+            }
+
+            // 2. Update HUD
+            document.getElementById('clock').textContent = now.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+            document.getElementById('date-display').textContent = now.toLocaleDateString([], {weekday: 'short', month: 'short', day: 'numeric'});
+
+            // 3. Auto-change phrase every 4 hours (at 0, 4, 8, 12, 16, 20)
+            if (now.getMinutes() === 0 && now.getSeconds() === 0 && hrs % 4 === 0) {
+                triggerNewPhrase();
+            }
+        }
+
+        function triggerNewPhrase() {
+            const el = document.getElementById('booster');
+            el.classList.remove('fade-in');
+            void el.offsetWidth; // Trigger reflow
+            el.innerHTML = getNewPhrase();
+            el.classList.add('fade-in');
+        }
+
+        // Handle City Input
+        const cityInput = document.getElementById('city');
+        cityInput.value = localStorage.getItem('pulseCity') || "";
+        cityInput.onchange = (e) => localStorage.setItem('pulseCity', e.target.value);
+
+        // Click to manually boost dopamine
+        document.getElementById('booster').onclick = triggerNewPhrase;
+
+        // Init
+        setInterval(refreshApp, 1000);
+        refreshApp();
+    </script>
+</body>
+</html>
