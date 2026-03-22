@@ -1,865 +1,407 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="color-scheme" content="dark" />
-  <title>ALPHA PULSE | Timezone-Aware</title>
-  <meta name="description" content="Alpha Words — high-performance focus every 6 minutes, localized to your city." />
-
-  <!-- Typography: distinctive display + readable body -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>ALPHA PULSE | Dynamic Vibrant</title>
   <style>
-    :root{
-      --hud: rgba(255,255,255,.08);
-      --hud-border: rgba(255,255,255,.14);
-
-      /* 4 energetic gradients (kept) */
-      --g1: linear-gradient(-45deg, #f093fb, #f5576c, #ff0844);
-      --g2: linear-gradient(-45deg, #4facfe, #00f2fe, #38f9d7);
-      --g3: linear-gradient(-45deg, #667eea, #764ba2, #6B8DD6);
-      --g4: linear-gradient(-45deg, #11998e, #38ef7d, #00b09b);
-
-      --bg: var(--g1);
-      --bg-size: 420% 420%;
-      --bg-speed: 10s;
-
-      --font-display: "Bebas Neue", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-      --font-body: "Inter", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
-
-      --pad: clamp(16px, 3vw, 26px);
-      --radius: 18px;
-
-      --ease: cubic-bezier(.2,.9,.2,1);
-      --fast: 220ms;
+    :root {
+      /* Vibrant High-Energy Gradients */
+      --color-1: linear-gradient(-45deg, #f093fb, #f5576c, #ff0844);
+      --color-2: linear-gradient(-45deg, #4facfe, #00f2fe, #38f9d7);
+      --color-3: linear-gradient(-45deg, #667eea, #764ba2, #6B8DD6);
+      --color-4: linear-gradient(-45deg, #11998e, #38ef7d, #00b09b);
     }
 
-    *{ box-sizing: border-box; }
-    html, body{ height: 100%; }
-    body{
-      margin: 0;
-      color: rgba(255,255,255,.92);
-      font-family: var(--font-body);
-      background: var(--bg);
-      background-size: var(--bg-size);
-      animation: gradientBG var(--bg-speed) ease infinite;
+    body, html {
+      margin: 0; padding: 0; width: 100%; height: 100%;
+      font-family: 'Impact', 'Arial Black', sans-serif;
       overflow: hidden;
-    }
-
-    body::before{
-      content:"";
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      background:
-        radial-gradient(1200px 700px at 15% 25%, rgba(0,0,0,.18), transparent 55%),
-        radial-gradient(900px 700px at 85% 70%, rgba(0,0,0,.22), transparent 60%),
-        linear-gradient(to bottom, rgba(0,0,0,.12), rgba(0,0,0,.28));
-      mix-blend-mode: multiply;
-    }
-    body::after{
-      content:"";
-      position: fixed;
-      inset: -2px;
-      pointer-events: none;
-      opacity: .55;
-      background-image:
-        linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
-      background-size: 28px 28px;
-      mask-image: radial-gradient(closest-side at 50% 40%, rgba(0,0,0,.85), transparent 70%);
-    }
-
-    @keyframes gradientBG{
-      0%{ background-position: 0% 50%; }
-      50%{ background-position: 100% 50%; }
-      100%{ background-position: 0% 50%; }
-    }
-
-    .app{
-      min-height: 100%;
-      display: grid;
-      grid-template-rows: auto 1fr auto;
-      position: relative;
-      isolation: isolate;
-    }
-
-    header{
-      padding: var(--pad);
+      color: white;
+      background-size: 400% 400% !important;
+      transition: background 1.5s ease-in-out;
       display: flex;
-      align-items: flex-start;
+      flex-direction: column;
+    }
+
+    /* Top HUD */
+    .hud {
+      padding: 25px;
+      display: flex;
       justify-content: space-between;
-      gap: 14px;
-    }
-
-    .hud{
-      display: grid;
-      gap: 6px;
-      padding: 12px 14px;
-      border-radius: var(--radius);
-      background: var(--hud);
-      border: 1px solid var(--hud-border);
-      backdrop-filter: blur(12px);
-      box-shadow: 0 10px 35px rgba(0,0,0,.22);
-      min-width: min(320px, 100%);
-    }
-
-    .hud .label{
-      font-size: 12px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      opacity: .85;
+      font-family: 'Segoe UI', sans-serif;
       font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+      user-select: none;
     }
 
-    .hud .value{
-      font-size: 14px;
-      letter-spacing: .04em;
-      font-weight: 700;
+    /* Date left */
+    #date-info {
+      align-self: flex-start;
     }
 
-    .right{
+    /* City and time right */
+    #city-time {
       text-align: right;
-      justify-items: end;
-    }
-
-    .clock{
-      font-variant-numeric: tabular-nums;
-      font-size: 18px;
-      letter-spacing: .08em;
-    }
-
-    main{
-      display: grid;
-      place-items: center;
-      padding: var(--pad);
-    }
-
-    .stage{
-      width: min(980px, 100%);
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-      align-items: center;
-      justify-items: center;
-      position: relative;
-    }
-
-    .booster{
-      margin: 0;
-      text-align: center;
-      font-family: var(--font-display);
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 600;
+      letter-spacing: 2px;
       text-transform: uppercase;
-      letter-spacing: .06em;
-      line-height: .86;
-      font-size: clamp(3.4rem, 10.5vw, 10.2rem);
-      text-shadow:
-        0 12px 50px rgba(0,0,0,.35),
-        0 2px 0 rgba(0,0,0,.12);
-      user-select: none;
+    }
+
+    #city-name {
+      font-size: 1rem;
+    }
+
+    #clock {
+      font-size: 1.5rem;
+      margin-top: 5px;
+      font-weight: 700;
+    }
+
+    /* Center stage */
+    .stage {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #booster {
+      font-size: 18vw;
+      line-height: 0.85;
+      text-shadow: 0 10px 40px rgba(0,0,0,0.3);
       cursor: pointer;
-      outline: none;
-      -webkit-tap-highlight-color: transparent;
-      transform: translateZ(0);
-    }
-
-    .booster:focus-visible{
-      outline: 2px solid rgba(255,255,255,.7);
-      outline-offset: 8px;
-      border-radius: 10px;
-    }
-
-    .booster:hover{
-      transform: translateY(-1px) scale(1.01);
-      transition: transform var(--fast) var(--ease);
-    }
-    .booster:active{
-      transform: translateY(0px) scale(.995);
-      transition: transform 120ms var(--ease);
-    }
-
-    .subline{
-      font-size: clamp(.95rem, 2.2vw, 1.15rem);
-      letter-spacing: .12em;
+      user-select: none;
+      font-weight: 900;
       text-transform: uppercase;
-      opacity: .86;
-      text-align: center;
-      max-width: 62ch;
-      line-height: 1.4;
-    }
-
-    footer{
-      padding: calc(var(--pad) - 2px) var(--pad);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      color: rgba(255,255,255,.82);
-    }
-
-    .brandline{
-      font-size: 12px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      opacity: .9;
-    }
-
-    .meta{
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 12px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      opacity: .8;
       white-space: nowrap;
     }
 
-    .pill{
-      padding: 8px 10px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(0,0,0,.10);
-      backdrop-filter: blur(10px);
+    @media (min-width: 1000px) {
+      #booster {
+        font-size: 11rem;
+      }
     }
 
-    /* Reveal + swap */
-    .reveal{ opacity: 0; transform: translateY(10px); animation: reveal 700ms var(--ease) forwards; }
-    .d1{ animation-delay: 60ms; }
-    .d2{ animation-delay: 140ms; }
-    .d3{ animation-delay: 220ms; }
-    @keyframes reveal{ to{ opacity: 1; transform: translateY(0); } }
-    .swap{ animation: swapIn 520ms var(--ease); }
-    @keyframes swapIn{
-      from{ opacity: 0; transform: translateY(8px) scale(.985); filter: blur(10px); }
-      to{ opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+    /* Footer */
+    footer {
+      padding: 20px;
+      font-family: 'Segoe UI', sans-serif;
+      font-size: clamp(0.6rem, 2vw, 0.9rem);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      opacity: 0.8;
+      text-align: center;
+      background: rgba(0,0,0,0.1);
+      user-select: none;
     }
 
-    /* City modal */
-    .overlay{
+    /* Fade in animation for phrase */
+    .fade-in {
+      animation: fadeInMsg 0.6s ease-out;
+    }
+
+    @keyframes fadeInMsg {
+      from {
+        opacity: 0;
+        transform: scale(0.9);
+        filter: blur(8px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1);
+        filter: blur(0);
+      }
+    }
+
+    /* City prompt overlay */
+    #city-overlay {
       position: fixed;
       inset: 0;
-      display: grid;
-      place-items: center;
-      padding: var(--pad);
-      background: rgba(0,0,0,.55);
-      backdrop-filter: blur(10px);
-      z-index: 50;
-    }
-    .modal{
-      width: min(720px, 100%);
-      border-radius: calc(var(--radius) + 6px);
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(12,14,20,.72);
-      box-shadow: 0 20px 80px rgba(0,0,0,.55);
-      overflow: hidden;
-    }
-    .modal__top{
-      padding: 18px 18px 10px 18px;
+      background: rgba(0,0,0,0.75);
       display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 14px;
-    }
-    .modal__title{
-      margin: 0;
-      font-family: var(--font-display);
-      text-transform: uppercase;
-      letter-spacing: .08em;
-      font-size: clamp(1.6rem, 5vw, 2.4rem);
-      line-height: 1;
-    }
-    .modal__hint{
-      margin: 6px 0 0 0;
-      opacity: .85;
-      line-height: 1.5;
-      max-width: 62ch;
-      font-size: 14px;
-    }
-    .modal__body{ padding: 0 18px 18px 18px; }
-    .row{
-      display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 12px;
+      justify-content: center;
       align-items: center;
-      margin-top: 12px;
-    }
-    .input{
-      width: 100%;
-      padding: 14px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(255,255,255,.06);
-      color: rgba(255,255,255,.92);
-      font-family: var(--font-body);
-      font-weight: 600;
-      letter-spacing: .02em;
-      outline: none;
-    }
-    .input:focus{
-      border-color: rgba(255,255,255,.45);
-      box-shadow: 0 0 0 4px rgba(255,255,255,.10);
-    }
-    .btn{
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid rgba(255,255,255,.22);
-      background: rgba(255,255,255,.12);
-      color: rgba(255,255,255,.92);
-      font-family: var(--font-body);
-      font-weight: 700;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      cursor: pointer;
-      transition: transform var(--fast) var(--ease), background var(--fast) var(--ease);
-      white-space: nowrap;
-    }
-    .btn:hover{ transform: translateY(-1px); background: rgba(255,255,255,.16); }
-    .btn:active{ transform: translateY(0); background: rgba(255,255,255,.10); }
-    .btn.secondary{
-      background: transparent;
-      opacity: .9;
-    }
-    .chips{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      margin-top: 12px;
-    }
-    .chip{
-      border: 1px solid rgba(255,255,255,.18);
-      background: rgba(0,0,0,.12);
-      padding: 9px 12px;
-      border-radius: 999px;
-      cursor: pointer;
+      z-index: 9999;
+      font-family: 'Segoe UI', sans-serif;
+      color: white;
       user-select: none;
-      font-size: 12px;
-      letter-spacing: .12em;
+    }
+
+    #city-prompt {
+      background: #222;
+      padding: 30px 40px;
+      border-radius: 12px;
+      max-width: 400px;
+      width: 90%;
+      text-align: center;
+    }
+
+    #city-prompt h2 {
+      margin-top: 0;
+      font-weight: 700;
+      font-size: 1.5rem;
       text-transform: uppercase;
-      opacity: .9;
+      letter-spacing: 2px;
+      margin-bottom: 15px;
     }
-    .error{
+
+    #city-input {
+      width: 100%;
+      padding: 12px 15px;
+      font-size: 1rem;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+      margin-bottom: 15px;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    #city-submit {
+      background: #38f9d7;
+      border: none;
+      padding: 12px 20px;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      transition: background 0.3s ease;
+    }
+
+    #city-submit:hover {
+      background: #00f2fe;
+    }
+
+    #city-error {
+      color: #ff6b6b;
       margin-top: 10px;
-      font-size: 13px;
-      line-height: 1.4;
-      color: rgba(255,220,220,.95);
-      display: none;
-    }
-    .error.show{ display: block; }
-
-    @media (max-width: 420px){
-      header{ flex-direction: column; align-items: stretch; }
-      .right{ text-align: left; justify-items: start; }
-      footer{ flex-direction: column; align-items: flex-start; }
-      .meta{ white-space: normal; }
-      .row{ grid-template-columns: 1fr; }
-      .btn{ width: 100%; }
-    }
-
-    @media (prefers-reduced-motion: reduce){
-      body{ animation: none; }
-      .reveal, .swap{ animation: none !important; opacity: 1; transform: none; filter: none; }
-      .booster:hover, .booster:active{ transform: none; }
+      font-weight: 600;
+      font-size: 0.9rem;
+      min-height: 1.2em;
     }
   </style>
 </head>
-
 <body>
-  <div class="app" id="app">
-    <header aria-label="Status">
-      <div class="hud reveal d1" aria-live="polite">
-        <div class="label">Today</div>
-        <div class="value" id="date-info">—</div>
-      </div>
 
-      <div class="hud right reveal d2" aria-live="polite">
-        <div class="label" id="city-name">—</div>
-        <div class="value clock" id="clock">—</div>
-      </div>
-    </header>
-
-    <main>
-      <section class="stage" aria-label="Alpha pulse message">
-        <h1 class="booster reveal d3" id="booster" role="button" tabindex="0"
-            aria-label="Tap or press Enter to generate a new alpha phrase">
-          ALPHA<br>ENERGY<br>NOW
-        </h1>
-        <p class="subline" id="subline">
-          High-performance clarity — refreshed every 6 minutes. Tap to override.
-        </p>
-      </section>
-    </main>
-
-    <footer aria-label="Footer">
-      <div class="brandline">ALPHA PULSE</div>
-      <div class="meta">
-        <span class="pill" id="next-pulse">Next pulse: —</span>
-        <span class="pill" id="mode">City time</span>
-      </div>
-    </footer>
+  <div class="hud">
+    <div id="date-info">SUN, MAR 22</div>
+    <div id="city-time">
+      <div id="city-name">NEW YORK</div>
+      <div id="clock">11:42 AM</div>
+    </div>
   </div>
 
-  <!-- City prompt overlay -->
-  <div class="overlay" id="city-overlay" role="dialog" aria-modal="true" aria-labelledby="city-title">
-    <div class="modal">
-      <div class="modal__top">
-        <div>
-          <h2 class="modal__title" id="city-title">What city are you in now?</h2>
-          <p class="modal__hint">
-            Type a city name (e.g., <strong>Ho Chi Minh City</strong>, <strong>Hanoi</strong>, <strong>London</strong>).
-            We’ll map it to a timezone and show the correct local time/date.
-            <br><br>
-            Privacy: your choice is stored only in your browser (localStorage).
-          </p>
-        </div>
-        <button class="btn secondary" id="skip-btn" type="button" aria-label="Skip city selection">Skip</button>
-      </div>
+  <div class="stage">
+    <div id="booster" class="fade-in">WIN<br>THE<br>EMPIRE</div>
+  </div>
 
-      <div class="modal__body">
-        <div class="row">
-          <input class="input" id="city-input" type="text" inputmode="text" autocomplete="address-level2"
-                 placeholder="Enter your city…" />
-          <button class="btn" id="save-btn" type="button">Set City</button>
-        </div>
+  <footer>
+    ALPHA WORDS FOR THE ULTIMATE SUCCESS FOR THE ENTREPRENEURS IN EVERY 6 MINUTES
+  </footer>
 
-        <div class="chips" aria-label="Quick picks">
-          <div class="chip" data-city="New York">New York</div>
-          <div class="chip" data-city="London">London</div>
-          <div class="chip" data-city="Dubai">Dubai</div>
-          <div class="chip" data-city="Singapore">Singapore</div>
-          <div class="chip" data-city="Hong Kong">Hong Kong</div>
-          <div class="chip" data-city="Ho Chi Minh City">Ho Chi Minh City</div>
-          <div class="chip" data-city="Hanoi">Hanoi</div>
-          <div class="chip" data-city="Tokyo">Tokyo</div>
-        </div>
-
-        <div class="error" id="city-error" role="alert"></div>
-      </div>
+  <div id="city-overlay" aria-modal="true" role="dialog" aria-labelledby="city-prompt-title" style="display:none;">
+    <div id="city-prompt">
+      <h2 id="city-prompt-title">What city are you in now?</h2>
+      <input type="text" id="city-input" placeholder="Enter your city name" autocomplete="off" />
+      <button id="city-submit">Submit</button>
+      <div id="city-error"></div>
     </div>
   </div>
 
   <script>
-    /**
-     * City -> Timezone mapping strategy (no external APIs):
-     * - We cannot reliably convert arbitrary city names to IANA timezones without a geocoding/timezone service.
-     * - So we use:
-     *   1) A curated dictionary of common/global cities (expandable).
-     *   2) A fallback that lets the user type an IANA timezone if they want (e.g., "Asia/Ho_Chi_Minh").
-     *   3) If unknown, we stay on the user's device timezone and show a polite error + suggestion.
-     *
-     * This keeps the app static-host friendly (GitHub Pages) and "production-safe" without leaking privacy.
-     */
+    const Actions = [
+      "EXECUTE", "COMPOUND", "ALIGN", "ACCELERATE", "DECIDE", "DEPLOY",
+      "FOCUS", "REFINE", "ELEVATE", "OUTPERFORM", "LEAD", "BUILD",
+      "SCALE", "NEGOTIATE", "ACQUIRE", "INVEST", "CONSOLIDATE",
+      "SIMPLIFY", "PRIORITIZE", "DOMINATE", "SHIP", "CLOSE", "EXPAND",
+      "PROTECT", "OPTIMIZE", "DELEGATE", "SYSTEMIZE", "STANDARDIZE"
+    ];
+    const Targets = [
+      "YOUR", "THE", "THIS", "NEXT", "REAL", "CORE", "ONLY", "TRUE",
+      "STRATEGIC", "INEVITABLE", "HIGH-VALUE", "LONG-TERM", "NEAR-TERM",
+      "NON-NEGOTIABLE", "SIGNATURE", "CATEGORY-LEADING"
+    ];
+    const Outcomes = [
+      "LEGACY", "EDGE", "CLARITY", "CASHFLOW", "EQUITY", "MOAT",
+      "REPUTATION", "OPTIONALITY", "FREEDOM", "MOMENTUM", "PRECISION",
+      "RESULTS", "WEALTH", "IMPACT", "VICTORY", "SIGNAL", "POWER",
+      "CALM", "CONTROL", "SOVEREIGNTY", "WORLD-CLASS", "STANDARD"
+    ];
 
-    const CITY_TO_TZ = new Map([
-      // Vietnam
-      ["ho chi minh city", "Asia/Ho_Chi_Minh"],
-      ["hcmc", "Asia/Ho_Chi_Minh"],
-      ["saigon", "Asia/Ho_Chi_Minh"],
-      ["hanoi", "Asia/Ho_Chi_Minh"],
-      ["da nang", "Asia/Ho_Chi_Minh"],
+    const gradients = [
+      "var(--color-1)",
+      "var(--color-2)",
+      "var(--color-3)",
+      "var(--color-4)"
+    ];
 
-      // US
-      ["new york", "America/New_York"],
-      ["nyc", "America/New_York"],
-      ["los angeles", "America/Los_Angeles"],
-      ["san francisco", "America/Los_Angeles"],
-      ["seattle", "America/Los_Angeles"],
-      ["chicago", "America/Chicago"],
-      ["miami", "America/New_York"],
+    const boosterEl = document.getElementById('booster');
+    const dateInfoEl = document.getElementById('date-info');
+    const cityNameEl = document.getElementById('city-name');
+    const clockEl = document.getElementById('clock');
+    const cityOverlay = document.getElementById('city-overlay');
+    const cityInput = document.getElementById('city-input');
+    const citySubmit = document.getElementById('city-submit');
+    const cityError = document.getElementById('city-error');
 
-      // Europe
-      ["london", "Europe/London"],
-      ["paris", "Europe/Paris"],
-      ["berlin", "Europe/Berlin"],
-      ["zurich", "Europe/Zurich"],
-      ["geneva", "Europe/Zurich"],
-      ["milan", "Europe/Rome"],
+    // City to timezone mapping (simple curated list)
+    const CITY_TO_TZ = {
+      "new york": "America/New_York",
+      "los angeles": "America/Los_Angeles",
+      "chicago": "America/Chicago",
+      "houston": "America/Chicago",
+      "miami": "America/New_York",
+      "london": "Europe/London",
+      "paris": "Europe/Paris",
+      "berlin": "Europe/Berlin",
+      "dubai": "Asia/Dubai",
+      "singapore": "Asia/Singapore",
+      "hong kong": "Asia/Hong_Kong",
+      "tokyo": "Asia/Tokyo",
+      "seoul": "Asia/Seoul",
+      "ho chi minh city": "Asia/Ho_Chi_Minh",
+      "hanoi": "Asia/Ho_Chi_Minh",
+      "sydney": "Australia/Sydney",
+      "melbourne": "Australia/Melbourne"
+    };
 
-      // Middle East
-      ["dubai", "Asia/Dubai"],
-      ["abu dhabi", "Asia/Dubai"],
-      ["riyadh", "Asia/Riyadh"],
-      ["doha", "Asia/Qatar"],
+    let userTimeZone = null;
+    let userCity = null;
 
-      // Asia
-      ["singapore", "Asia/Singapore"],
-      ["hong kong", "Asia/Hong_Kong"],
-      ["shanghai", "Asia/Shanghai"],
-      ["beijing", "Asia/Shanghai"],
-      ["shenzhen", "Asia/Shanghai"],
-      ["taipei", "Asia/Taipei"],
-      ["tokyo", "Asia/Tokyo"],
-      ["seoul", "Asia/Seoul"],
-      ["bangkok", "Asia/Bangkok"],
-      ["jakarta", "Asia/Jakarta"],
-      ["manila", "Asia/Manila"],
-
-      // Oceania
-      ["sydney", "Australia/Sydney"],
-      ["melbourne", "Australia/Melbourne"]
-    ]);
-
-    function normalizeCityInput(s) {
-      return (s ?? "")
-        .trim()
-        .toLowerCase()
-        .replace(/\s+/g, " ");
+    // Utility: format date/time in given timezone
+    function formatInTimeZone(date, timeZone, options) {
+      return new Intl.DateTimeFormat('en-US', { timeZone, ...options }).format(date);
     }
 
-    function isValidIanaTimeZone(tz) {
-      try {
-        Intl.DateTimeFormat(undefined, { timeZone: tz }).format(new Date());
-        return true;
-      } catch {
+    // Show city prompt overlay
+    function showCityPrompt() {
+      cityOverlay.style.display = 'flex';
+      cityInput.value = '';
+      cityError.textContent = '';
+      cityInput.focus();
+    }
+
+    // Hide city prompt overlay
+    function hideCityPrompt() {
+      cityOverlay.style.display = 'none';
+    }
+
+    // Validate city input and set timezone
+    function setCity(cityRaw) {
+      const city = cityRaw.trim().toLowerCase();
+      if (!city) {
+        cityError.textContent = 'Please enter a city name.';
         return false;
       }
+      if (!(city in CITY_TO_TZ)) {
+        cityError.textContent = 'City not recognized. Try a major city like New York or London.';
+        return false;
+      }
+      userCity = cityRaw.trim();
+      userTimeZone = CITY_TO_TZ[city];
+      localStorage.setItem('alphaPulseCity', userCity);
+      localStorage.setItem('alphaPulseTimeZone', userTimeZone);
+      hideCityPrompt();
+      updateTimeAndDate();
+      return true;
     }
 
-    function resolveTimeZoneFromCity(cityRaw) {
-      const city = normalizeCityInput(cityRaw);
-      if (!city) return { ok: false, reason: "EMPTY" };
-
-      // 1) Direct dictionary hit
-      if (CITY_TO_TZ.has(city)) return { ok: true, timeZone: CITY_TO_TZ.get(city), cityLabel: cityRaw.trim() };
-
-      // 2) If user typed an IANA timezone directly
-      if (isValidIanaTimeZone(cityRaw.trim())) return { ok: true, timeZone: cityRaw.trim(), cityLabel: cityRaw.trim() };
-
-      // 3) Try some light heuristics: strip punctuation
-      const softened = city.replace(/[.,]/g, "");
-      if (CITY_TO_TZ.has(softened)) return { ok: true, timeZone: CITY_TO_TZ.get(softened), cityLabel: cityRaw.trim() };
-
-      return { ok: false, reason: "UNKNOWN" };
-    }
-
-    class AlphaPulseApp {
-      constructor(options = {}) {
-        this.PULSE_MINUTES = options.pulseMinutes ?? 6;
-        this.GRADIENTS = options.gradients ?? ["var(--g1)", "var(--g2)", "var(--g3)", "var(--g4)"];
-
-        // Expanded phrase banks: HNW / leadership / execution / calm power
-        // Tone: confident, premium, decisive (avoid cringe aggression).
-        this.ACTIONS = options.actions ?? [
-          "EXECUTE", "COMPOUND", "ALIGN", "ACCELERATE", "DECIDE", "DEPLOY",
-          "FOCUS", "REFINE", "ELEVATE", "OUTPERFORM", "LEAD", "BUILD",
-          "SCALE", "NEGOTIATE", "ACQUIRE", "INVEST", "CONSOLIDATE",
-          "SIMPLIFY", "PRIORITIZE", "DOMINATE", "SHIP", "CLOSE", "EXPAND",
-          "PROTECT", "OPTIMIZE", "DELEGATE", "SYSTEMIZE", "STANDARDIZE"
-        ];
-
-        this.TARGETS = options.targets ?? [
-          "YOUR", "THE", "THIS", "NEXT", "REAL", "CORE", "ONLY", "TRUE",
-          "STRATEGIC", "INEVITABLE", "HIGH-VALUE", "LONG-TERM", "NEAR-TERM",
-          "NON-NEGOTIABLE", "SIGNATURE", "CATEGORY-LEADING"
-        ];
-
-        this.OUTCOMES = options.outcomes ?? [
-          "LEGACY", "EDGE", "CLARITY", "CASHFLOW", "EQUITY", "MOAT",
-          "REPUTATION", "OPTIONALITY", "FREEDOM", "MOMENTUM", "PRECISION",
-          "RESULTS", "WEALTH", "IMPACT", "VICTORY", "SIGNAL", "POWER",
-          "CALM", "CONTROL", "SOVEREIGNTY", "WORLD-CLASS", "STANDARD"
-        ];
-
-        this.$ = {
-          booster: document.getElementById("booster"),
-          clock: document.getElementById("clock"),
-          date: document.getElementById("date-info"),
-          nextPulse: document.getElementById("next-pulse"),
-          city: document.getElementById("city-name"),
-          overlay: document.getElementById("city-overlay"),
-          cityInput: document.getElementById("city-input"),
-          saveBtn: document.getElementById("save-btn"),
-          skipBtn: document.getElementById("skip-btn"),
-          error: document.getElementById("city-error"),
-          chips: Array.from(document.querySelectorAll(".chip"))
-        };
-
-        this.state = {
-          timeZone: null,     // IANA tz, or null => device tz
-          cityLabel: null,    // what we display
-          lastClock: "",
-          lastDate: "",
-          lastGradientIndex: -1,
-          lastPulseKey: null,
-          lastNextPulseText: ""
-        };
-
-        this.onActivateBooster = this.onActivateBooster.bind(this);
-        this.tick = this.tick.bind(this);
-        this.onVisibility = this.onVisibility.bind(this);
-
-        this.initA11y();
-        this.initEvents();
-        this.initCityFromStorageOrPrompt();
-
-        // Initial paint
-        this.triggerNewPhrase();
-        this.tick();
-
-        this.start();
-      }
-
-      initA11y() {
-        this.$.booster.setAttribute("role", "button");
-        this.$.booster.setAttribute("tabindex", "0");
-      }
-
-      initEvents() {
-        this.$.booster.addEventListener("click", this.onActivateBooster);
-        this.$.booster.addEventListener("keydown", (e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            e.preventDefault();
-            this.onActivateBooster();
-          }
-        });
-
-        document.addEventListener("visibilitychange", this.onVisibility, { passive: true });
-
-        this.$.saveBtn.addEventListener("click", () => this.applyCityInput());
-        this.$.skipBtn.addEventListener("click", () => this.hideOverlay(true));
-
-        this.$.cityInput.addEventListener("keydown", (e) => {
-          if (e.key === "Enter") this.applyCityInput();
-          if (e.key === "Escape") this.hideOverlay(true);
-        });
-
-        this.$.chips.forEach(chip => {
-          chip.addEventListener("click", () => {
-            this.$.cityInput.value = chip.getAttribute("data-city") || "";
-            this.applyCityInput();
-          });
-        });
-      }
-
-      start() {
-        this.timer = window.setInterval(this.tick, 1000);
-      }
-
-      onVisibility() {
-        if (!document.hidden) this.tick();
-      }
-
-      nowInZone() {
-        // We keep a Date object in "absolute time" and format it in the target tz using Intl.
-        // To compute pulse boundary aligned to that tz, we derive tz-based parts below.
-        return new Date();
-      }
-
-      formatInZone(date, options) {
-        const opts = { ...options };
-        if (this.state.timeZone) opts.timeZone = this.state.timeZone;
-        return new Intl.DateTimeFormat(undefined, opts).format(date);
-      }
-
-      getZonedParts(date) {
-        // Derive hour/minute/second in target timeZone via formatToParts
-        const dtf = new Intl.DateTimeFormat("en-US", {
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit",
-          hour12: false,
-          ...(this.state.timeZone ? { timeZone: this.state.timeZone } : {})
-        });
-
-        const parts = dtf.formatToParts(date);
-        const get = (type) => parts.find(p => p.type === type)?.value ?? "00";
-        return {
-          h: Number(get("hour")),
-          m: Number(get("minute")),
-          s: Number(get("second"))
-        };
-      }
-
-      tick() {
-        const now = this.nowInZone();
-
-        this.applyBackgroundForNow(now);
-        this.applyTimeAndDate(now);
-        this.handlePulseBoundary(now);
-        this.updateNextPulseLabel(now);
-      }
-
-      applyTimeAndDate(now) {
-        const clockText = this.formatInZone(now, { hour: "2-digit", minute: "2-digit" });
-        if (clockText !== this.state.lastClock) {
-          this.$.clock.textContent = clockText;
-          this.state.lastClock = clockText;
-        }
-
-        const dateText = this.formatInZone(now, { weekday: "short", month: "short", day: "numeric" });
-        if (dateText !== this.state.lastDate) {
-          this.$.date.textContent = dateText;
-          this.state.lastDate = dateText;
-        }
-
-        // City label
-        const label = this.state.cityLabel ?? "Your Time";
-        this.$.city.textContent = label;
-      }
-
-      applyBackgroundForNow(now) {
-        const { m } = this.getZonedParts(now);
-        const idx = Math.floor(m / this.PULSE_MINUTES) % this.GRADIENTS.length;
-        if (idx !== this.state.lastGradientIndex) {
-          document.body.style.background = this.GRADIENTS[idx];
-          this.state.lastGradientIndex = idx;
-        }
-      }
-
-      handlePulseBoundary(now) {
-        const { h, m, s } = this.getZonedParts(now);
-        if (s !== 0) return;
-
-        const pulseSlot = Math.floor(m / this.PULSE_MINUTES);
-
-        // Include date in pulseKey (in zone) to avoid collisions across days.
-        const dayKey = this.formatInZone(now, { year: "numeric", month: "2-digit", day: "2-digit" }).replace(/\D/g, "");
-        const pulseKey = `${dayKey}-${String(h).padStart(2, "0")}-${pulseSlot}`;
-
-        if (m % this.PULSE_MINUTES === 0 && pulseKey !== this.state.lastPulseKey) {
-          this.triggerNewPhrase();
-          this.state.lastPulseKey = pulseKey;
-        }
-      }
-
-      randFrom(arr) {
-        return arr[Math.floor(Math.random() * arr.length)];
-      }
-
-      triggerNewPhrase() {
-        const a = this.randFrom(this.ACTIONS);
-        const t = this.randFrom(this.TARGETS);
-        const o = this.randFrom(this.OUTCOMES);
-
-        // A more "premium" composition rule:
-        // - Prefer 3-line stack for impact
-        // - Occasionally compress into a single decisive line
-        const stacked = Math.random() > 0.18;
-        const html = stacked ? `${a}<br>${t}<br>${o}` : `${a} ${t} ${o}`;
-
-        this.$.booster.classList.remove("swap");
-        void this.$.booster.offsetWidth;
-        this.$.booster.innerHTML = html;
-        this.$.booster.classList.add("swap");
-      }
-
-      onActivateBooster() {
-        this.triggerNewPhrase();
-      }
-
-      getNextPulseDate(now) {
-        // We need the next pulse time in the *zoned* clock.
-        // We'll compute "minutes to add" from zoned minutes/seconds, then add to real Date.
-        const { m, s } = this.getZonedParts(now);
-        const mod = m % this.PULSE_MINUTES;
-
-        const addMin = (mod === 0 && s === 0) ? this.PULSE_MINUTES : (this.PULSE_MINUTES - mod);
-        const next = new Date(now);
-        next.setSeconds(0, 0);
-        next.setMinutes(next.getMinutes() + addMin);
-        return next;
-      }
-
-      updateNextPulseLabel(now) {
-        const next = this.getNextPulseDate(now);
-        const text = "Next pulse: " + this.formatInZone(next, { hour: "2-digit", minute: "2-digit" });
-        if (text !== this.state.lastNextPulseText) {
-          this.$.nextPulse.textContent = text;
-          this.state.lastNextPulseText = text;
-        }
-      }
-
-      showError(msg) {
-        this.$.error.textContent = msg;
-        this.$.error.classList.add("show");
-      }
-
-      clearError() {
-        this.$.error.textContent = "";
-        this.$.error.classList.remove("show");
-      }
-
-      hideOverlay(skipped = false) {
-        this.$.overlay.style.display = "none";
-        this.$.overlay.setAttribute("aria-hidden", "true");
-        this.clearError();
-        if (skipped) {
-          // Persist skip state so we don't annoy repeat visitors
-          localStorage.setItem("alphaPulse.citySkipped", "1");
-        }
-        // Focus booster for immediate use
-        this.$.booster.focus({ preventScroll: true });
-        this.tick();
-      }
-
-      showOverlay() {
-        this.$.overlay.style.display = "grid";
-        this.$.overlay.removeAttribute("aria-hidden");
-        // focus input
-        setTimeout(() => this.$.cityInput.focus({ preventScroll: true }), 50);
-      }
-
-      persistCity(cityLabel, timeZone) {
-        localStorage.setItem("alphaPulse.cityLabel", cityLabel);
-        localStorage.setItem("alphaPulse.timeZone", timeZone);
-        localStorage.removeItem("alphaPulse.citySkipped");
-      }
-
-      applyCityInput() {
-        const raw = this.$.cityInput.value;
-        const result = resolveTimeZoneFromCity(raw);
-
-        if (!result.ok) {
-          if (result.reason === "EMPTY") {
-            this.showError("Please enter a city (or press Skip).");
-            return;
-          }
-          this.showError(
-            "We couldn’t map that city to a timezone in this offline build. " +
-            "Try a well-known city (e.g., London, Dubai, Singapore) or type an IANA timezone like “Asia/Ho_Chi_Minh”."
-          );
-          return;
-        }
-
-        this.clearError();
-        this.state.timeZone = result.timeZone;
-        this.state.cityLabel = result.cityLabel;
-
-        this.persistCity(result.cityLabel, result.timeZone);
-        this.hideOverlay(false);
-      }
-
-      initCityFromStorageOrPrompt() {
-        const savedTZ = localStorage.getItem("alphaPulse.timeZone");
-        const savedCity = localStorage.getItem("alphaPulse.cityLabel");
-        const skipped = localStorage.getItem("alphaPulse.citySkipped") === "1";
-
-        if (savedTZ && isValidIanaTimeZone(savedTZ)) {
-          this.state.timeZone = savedTZ;
-          this.state.cityLabel = savedCity || "Your City";
-          this.$.cityInput.value = this.state.cityLabel;
-          this.hideOverlay(false);
-          return;
-        }
-
-        // If they previously skipped, don't prompt again.
-        if (skipped) {
-          this.state.timeZone = null; // device timezone
-          this.state.cityLabel = "Your Time";
-          this.hideOverlay(true);
-          return;
-        }
-
-        // Prompt on first visit
-        this.showOverlay();
+    // Load city/timezone from localStorage or prompt
+    function initCityAndTimeZone() {
+      const storedCity = localStorage.getItem('alphaPulseCity');
+      const storedTZ = localStorage.getItem('alphaPulseTimeZone');
+      if (storedCity && storedTZ) {
+        userCity = storedCity;
+        userTimeZone = storedTZ;
+        updateTimeAndDate();
+      } else {
+        showCityPrompt();
       }
     }
 
-    window.addEventListener("DOMContentLoaded", () => {
-      new AlphaPulseApp({ pulseMinutes: 6 });
+    // Update date, city, time display
+    function updateTimeAndDate() {
+      const now = new Date();
+      const tz = userTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
+      const cityDisplay = userCity || 'Your City';
+
+      const dateStr = formatInTimeZone(now, tz, { weekday: 'short', month: 'short', day: 'numeric' }).toUpperCase();
+      const timeStr = formatInTimeZone(now, tz, { hour: 'numeric', minute: '2-digit', hour12: true }).toUpperCase();
+
+      dateInfoEl.textContent = dateStr;
+      cityNameEl.textContent = cityDisplay.toUpperCase();
+      clockEl.textContent = timeStr;
+    }
+
+    // Generate new phrase
+    function triggerNewPhrase() {
+      const a = Actions[Math.floor(Math.random() * Actions.length)];
+      const t = Targets[Math.floor(Math.random() * Targets.length)];
+      const o = Outcomes[Math.floor(Math.random() * Outcomes.length)];
+
+      boosterEl.classList.remove('fade-in');
+      void boosterEl.offsetWidth; // trigger reflow
+      boosterEl.innerHTML = `${a}<br>${t}<br>${o}`;
+      boosterEl.classList.add('fade-in');
+    }
+
+    // Update background gradient every minute
+    function updateBackgroundGradient() {
+      const now = new Date();
+      const mins = now.getMinutes();
+      // Cycle every minute through 4 gradients
+      const index = mins % gradients.length;
+      document.body.style.background = gradients[index];
+    }
+
+    // Main update loop: update time, background, phrase
+    let lastPhraseMinute = null;
+    function mainUpdate() {
+      const now = new Date();
+      const mins = now.getMinutes();
+      const secs = now.getSeconds();
+
+      updateTimeAndDate();
+      updateBackgroundGradient();
+
+      // Update phrase every 6 minutes at :00 seconds
+      if (mins % 6 === 0 && secs === 0 && lastPhraseMinute !== mins) {
+        triggerNewPhrase();
+        lastPhraseMinute = mins;
+      }
+    }
+
+    // Manual phrase override on click
+    boosterEl.addEventListener('click', () => {
+      triggerNewPhrase();
+    });
+
+    // City prompt submit
+    citySubmit.addEventListener('click', () => {
+      setCity(cityInput.value);
+    });
+
+    cityInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        setCity(cityInput.value);
+      }
+    });
+
+    // Initialize app
+    window.addEventListener('DOMContentLoaded', () => {
+      initCityAndTimeZone();
+      triggerNewPhrase();
+      mainUpdate();
+      setInterval(mainUpdate, 1000);
     });
   </script>
 </body>
