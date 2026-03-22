@@ -3,73 +3,59 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ALPHA PULSE | New York</title>
+  <title>ALPHA PULSE | Minimal Vanilla JS</title>
   <style>
     :root {
-      /* 4 Vibrant High-Energy Gradients */
       --color-1: linear-gradient(-45deg, #f093fb, #f5576c, #ff0844);
       --color-2: linear-gradient(-45deg, #4facfe, #00f2fe, #38f9d7);
       --color-3: linear-gradient(-45deg, #667eea, #764ba2, #6B8DD6);
       --color-4: linear-gradient(-45deg, #11998e, #38ef7d, #00b09b);
     }
 
-    body, html {
+    html, body {
       margin: 0; padding: 0; width: 100%; height: 100%;
-      overflow: hidden; font-family: 'Impact', 'Arial Black', sans-serif;
-      display: flex; flex-direction: column;
-      background-size: 400% 400% !important;
-      animation: gradientBG 10s ease infinite;
-      transition: background 1.5s ease-in-out;
+      font-family: 'Impact', 'Arial Black', sans-serif;
       color: white;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      background-size: 400% 400% !important;
+      transition: background 1.5s ease-in-out;
     }
 
-    @keyframes gradientBG {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    /* HUD - Top Section */
     .hud {
-      padding: 25px; display: flex; justify-content: space-between; align-items: flex-start;
-      font-family: 'Segoe UI', sans-serif; font-weight: 600;
-      letter-spacing: 2px; text-transform: uppercase;
+      padding: 25px;
+      display: flex;
+      justify-content: space-between;
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       font-size: clamp(0.8rem, 2.5vw, 1.1rem);
-      user-select: none;
-    }
-
-    #date-info {
       user-select: none;
     }
 
     #city-time {
       text-align: right;
-      user-select: none;
     }
 
     #city-name {
-      font-family: 'Segoe UI', sans-serif;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
       font-size: 1rem;
-      user-select: none;
     }
 
     #clock {
-      font-family: 'Segoe UI', sans-serif;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
       font-size: 1.5rem;
       margin-top: 5px;
-      user-select: none;
+      font-weight: 700;
     }
 
-    /* Stage - Center Section */
     .stage {
-      flex: 1; display: flex; justify-content: center; align-items: center;
-      padding: 20px; text-align: center;
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      text-align: center;
     }
 
     #booster {
@@ -81,6 +67,7 @@
       font-weight: 900;
       text-transform: uppercase;
       white-space: nowrap;
+      transition: opacity 0.6s ease;
     }
 
     @media (min-width: 1000px) {
@@ -89,7 +76,6 @@
       }
     }
 
-    /* Footer - Brand Message */
     footer {
       padding: 20px;
       font-family: 'Segoe UI', sans-serif;
@@ -102,24 +88,6 @@
       user-select: none;
     }
 
-    .fade-in {
-      animation: fadeInMsg 0.6s ease-out;
-    }
-
-    @keyframes fadeInMsg {
-      from {
-        opacity: 0;
-        transform: scale(0.9);
-        filter: blur(8px);
-      }
-      to {
-        opacity: 1;
-        transform: scale(1);
-        filter: blur(0);
-      }
-    }
-
-    /* City prompt overlay */
     #city-overlay {
       position: fixed;
       inset: 0;
@@ -201,7 +169,7 @@
   </div>
 
   <div class="stage">
-    <div id="booster" class="fade-in">ALPHA<br>ENERGY<br>NOW</div>
+    <div id="booster">ALPHA<br>ENERGY<br>NOW</div>
   </div>
 
   <footer>
@@ -218,7 +186,6 @@
   </div>
 
   <script>
-    // Original motivational words from your codebase
     const Actions = ["BUILD", "SCALE", "ATTACK", "WIN", "LEAD", "FOCUS", "EXECUTE", "GRIND", "DOMINATE"];
     const Targets = ["YOUR", "THE", "PURE", "REAL", "TOTAL", "EVERY"];
     const Outcomes = ["EMPIRE", "LEGACY", "VISION", "PROFIT", "RESULTS", "FUTURE", "VICTORY"];
@@ -239,7 +206,6 @@
     const citySubmit = document.getElementById('city-submit');
     const cityError = document.getElementById('city-error');
 
-    // City to timezone mapping (simple curated list)
     const CITY_TO_TZ = {
       "new york": "America/New_York",
       "los angeles": "America/Los_Angeles",
@@ -263,12 +229,10 @@
     let userTimeZone = null;
     let userCity = null;
 
-    // Utility: format date/time in given timezone
     function formatInTimeZone(date, timeZone, options) {
       return new Intl.DateTimeFormat('en-US', { timeZone, ...options }).format(date);
     }
 
-    // Show city prompt overlay
     function showCityPrompt() {
       cityOverlay.style.display = 'flex';
       cityInput.value = '';
@@ -276,12 +240,10 @@
       cityInput.focus();
     }
 
-    // Hide city prompt overlay
     function hideCityPrompt() {
       cityOverlay.style.display = 'none';
     }
 
-    // Validate city input and set timezone
     function setCity(cityRaw) {
       const city = cityRaw.trim().toLowerCase();
       if (!city) {
@@ -301,7 +263,6 @@
       return true;
     }
 
-    // Load city/timezone from localStorage or prompt
     function initCityAndTimeZone() {
       const storedCity = localStorage.getItem('alphaPulseCity');
       const storedTZ = localStorage.getItem('alphaPulseTimeZone');
@@ -314,7 +275,6 @@
       }
     }
 
-    // Update date, city, time display
     function updateTimeAndDate() {
       const now = new Date();
       const tz = userTimeZone || Intl.DateTimeFormat().resolvedOptions().timeZone;
@@ -328,28 +288,25 @@
       clockEl.textContent = timeStr;
     }
 
-    // Generate new phrase
     function triggerNewPhrase() {
       const a = Actions[Math.floor(Math.random() * Actions.length)];
       const t = Targets[Math.floor(Math.random() * Targets.length)];
       const o = Outcomes[Math.floor(Math.random() * Outcomes.length)];
 
-      boosterEl.classList.remove('fade-in');
-      void boosterEl.offsetWidth; // trigger reflow
-      boosterEl.innerHTML = `${a}<br>${t}<br>${o}`;
-      boosterEl.classList.add('fade-in');
+      boosterEl.style.opacity = 0;
+      setTimeout(() => {
+        boosterEl.innerHTML = `${a}<br>${t}<br>${o}`;
+        boosterEl.style.opacity = 1;
+      }, 300);
     }
 
-    // Update background gradient every minute
     function updateBackgroundGradient() {
       const now = new Date();
       const mins = now.getMinutes();
-      // Cycle every minute through 4 gradients
       const index = mins % gradients.length;
       document.body.style.background = gradients[index];
     }
 
-    // Main update loop: update time, background, phrase
     let lastPhraseMinute = null;
     function mainUpdate() {
       const now = new Date();
@@ -359,19 +316,16 @@
       updateTimeAndDate();
       updateBackgroundGradient();
 
-      // Update phrase every 6 minutes at :00 seconds
       if (mins % 6 === 0 && secs === 0 && lastPhraseMinute !== mins) {
         triggerNewPhrase();
         lastPhraseMinute = mins;
       }
     }
 
-    // Manual phrase override on click
     boosterEl.addEventListener('click', () => {
       triggerNewPhrase();
     });
 
-    // City prompt submit
     citySubmit.addEventListener('click', () => {
       setCity(cityInput.value);
     });
@@ -382,7 +336,6 @@
       }
     });
 
-    // Initialize app
     window.addEventListener('DOMContentLoaded', () => {
       initCityAndTimeZone();
       triggerNewPhrase();
@@ -392,4 +345,5 @@
   </script>
 </body>
 </html>
+
 
