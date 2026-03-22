@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>ALPHA PULSE | Dynamic Vibrant</title>
+  <title>ALPHA PULSE | New York</title>
   <style>
     :root {
-      /* Vibrant High-Energy Gradients */
+      /* 4 Vibrant High-Energy Gradients */
       --color-1: linear-gradient(-45deg, #f093fb, #f5576c, #ff0844);
       --color-2: linear-gradient(-45deg, #4facfe, #00f2fe, #38f9d7);
       --color-3: linear-gradient(-45deg, #667eea, #764ba2, #6B8DD6);
@@ -15,60 +15,61 @@
 
     body, html {
       margin: 0; padding: 0; width: 100%; height: 100%;
-      font-family: 'Impact', 'Arial Black', sans-serif;
-      overflow: hidden;
-      color: white;
+      overflow: hidden; font-family: 'Impact', 'Arial Black', sans-serif;
+      display: flex; flex-direction: column;
       background-size: 400% 400% !important;
+      animation: gradientBG 10s ease infinite;
       transition: background 1.5s ease-in-out;
-      display: flex;
-      flex-direction: column;
+      color: white;
     }
 
-    /* Top HUD */
+    @keyframes gradientBG {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    /* HUD - Top Section */
     .hud {
-      padding: 25px;
-      display: flex;
-      justify-content: space-between;
-      font-family: 'Segoe UI', sans-serif;
-      font-weight: 600;
-      letter-spacing: 2px;
-      text-transform: uppercase;
+      padding: 25px; display: flex; justify-content: space-between; align-items: flex-start;
+      font-family: 'Segoe UI', sans-serif; font-weight: 600;
+      letter-spacing: 2px; text-transform: uppercase;
       font-size: clamp(0.8rem, 2.5vw, 1.1rem);
       user-select: none;
     }
 
-    /* Date left */
     #date-info {
-      align-self: flex-start;
+      user-select: none;
     }
 
-    /* City and time right */
     #city-time {
       text-align: right;
+      user-select: none;
+    }
+
+    #city-name {
       font-family: 'Segoe UI', sans-serif;
       font-weight: 600;
       letter-spacing: 2px;
       text-transform: uppercase;
-    }
-
-    #city-name {
       font-size: 1rem;
+      user-select: none;
     }
 
     #clock {
+      font-family: 'Segoe UI', sans-serif;
+      font-weight: 600;
+      letter-spacing: 2px;
+      text-transform: uppercase;
       font-size: 1.5rem;
       margin-top: 5px;
-      font-weight: 700;
+      user-select: none;
     }
 
-    /* Center stage */
+    /* Stage - Center Section */
     .stage {
-      flex: 1;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-      text-align: center;
+      flex: 1; display: flex; justify-content: center; align-items: center;
+      padding: 20px; text-align: center;
     }
 
     #booster {
@@ -88,7 +89,7 @@
       }
     }
 
-    /* Footer */
+    /* Footer - Brand Message */
     footer {
       padding: 20px;
       font-family: 'Segoe UI', sans-serif;
@@ -101,7 +102,6 @@
       user-select: none;
     }
 
-    /* Fade in animation for phrase */
     .fade-in {
       animation: fadeInMsg 0.6s ease-out;
     }
@@ -201,11 +201,11 @@
   </div>
 
   <div class="stage">
-    <div id="booster" class="fade-in">WIN<br>THE<br>EMPIRE</div>
+    <div id="booster" class="fade-in">ALPHA<br>ENERGY<br>NOW</div>
   </div>
 
   <footer>
-    ALPHA WORDS FOR THE ULTIMATE SUCCESS FOR THE ENTREPRENEURS IN EVERY 6 MINUTES
+    Alpha Words for The Ultimate Success for the Entrepreneurs in every 6 minutes
   </footer>
 
   <div id="city-overlay" aria-modal="true" role="dialog" aria-labelledby="city-prompt-title" style="display:none;">
@@ -218,24 +218,10 @@
   </div>
 
   <script>
-    const Actions = [
-      "EXECUTE", "COMPOUND", "ALIGN", "ACCELERATE", "DECIDE", "DEPLOY",
-      "FOCUS", "REFINE", "ELEVATE", "OUTPERFORM", "LEAD", "BUILD",
-      "SCALE", "NEGOTIATE", "ACQUIRE", "INVEST", "CONSOLIDATE",
-      "SIMPLIFY", "PRIORITIZE", "DOMINATE", "SHIP", "CLOSE", "EXPAND",
-      "PROTECT", "OPTIMIZE", "DELEGATE", "SYSTEMIZE", "STANDARDIZE"
-    ];
-    const Targets = [
-      "YOUR", "THE", "THIS", "NEXT", "REAL", "CORE", "ONLY", "TRUE",
-      "STRATEGIC", "INEVITABLE", "HIGH-VALUE", "LONG-TERM", "NEAR-TERM",
-      "NON-NEGOTIABLE", "SIGNATURE", "CATEGORY-LEADING"
-    ];
-    const Outcomes = [
-      "LEGACY", "EDGE", "CLARITY", "CASHFLOW", "EQUITY", "MOAT",
-      "REPUTATION", "OPTIONALITY", "FREEDOM", "MOMENTUM", "PRECISION",
-      "RESULTS", "WEALTH", "IMPACT", "VICTORY", "SIGNAL", "POWER",
-      "CALM", "CONTROL", "SOVEREIGNTY", "WORLD-CLASS", "STANDARD"
-    ];
+    // Original motivational words from your codebase
+    const Actions = ["BUILD", "SCALE", "ATTACK", "WIN", "LEAD", "FOCUS", "EXECUTE", "GRIND", "DOMINATE"];
+    const Targets = ["YOUR", "THE", "PURE", "REAL", "TOTAL", "EVERY"];
+    const Outcomes = ["EMPIRE", "LEGACY", "VISION", "PROFIT", "RESULTS", "FUTURE", "VICTORY"];
 
     const gradients = [
       "var(--color-1)",
@@ -406,3 +392,4 @@
   </script>
 </body>
 </html>
+
